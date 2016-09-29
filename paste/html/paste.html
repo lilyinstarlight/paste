@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>paste - {name}</title>
+
+		<style>
+			.container {{
+				width: 100%;
+
+				box-sizing: border-box;
+
+				padding: 20px;
+
+				border: 1px solid #ccc;
+				border-radius: 16px;
+			}}
+
+			.highlighttable {{
+					width: 100%;
+
+					display: block;
+					overflow: scroll;
+			}}
+
+			.highlighttable .linenos {{
+				padding-right: 1em;
+			}}
+		</style>
+
+		<style>
+		{pygments}
+		</style>
+	</head>
+
+	<body>
+		<main>
+			<h3>{name}</h3>
+
+			<p>Date: {date}</p>
+			<p>Language: {language}</p>
+
+			<div class="container highlight">
+				{code}
+			</div>
+		</main>
+	</body>
+</html>
