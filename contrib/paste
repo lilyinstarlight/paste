@@ -115,8 +115,8 @@ if __name__ == '__main__':
 
 	parser = ArgumentParser(description='upload pastes to the pastebin service at {}'.format(service))
 	parser.add_argument('-a', '--alias', dest='alias', help='alias to upload paste under (random if omitted)')
-	parser.add_argument('-n', '--name', dest='name', default=None, help='name of paste (guessed if omitted)')
-	parser.add_argument('-l', '--language', dest='name', default=None, help='language of paste (guessed if omitted)')
+	parser.add_argument('-n', '--name', dest='name', help='name of paste (guessed if omitted)')
+	parser.add_argument('-l', '--language', dest='language', help='language of paste (guessed if omitted)')
 	parser.add_argument('file', nargs='?', default=sys.stdin, type=FileType('rb'), help='file to upload (reads from stdin if omitted)')
 
 	args = parser.parse_args()
