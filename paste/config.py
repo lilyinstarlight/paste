@@ -2,8 +2,8 @@
 addr = ('', 8080)
 
 # log locations
-log = '/home/foster/tmp/var/log/paste/paste.log'
-httplog = '/home/foster/tmp/var/log/paste/http.log'
+log = '/var/log/paste/paste.log'
+httplog = '/var/log/paste/http.log'
 
 # where service is located
 service = 'https://paste.fooster.io'
