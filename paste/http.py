@@ -57,7 +57,7 @@ class Paste(web.page.PageHandler):
         alias = self.groups[0]
 
         try:
-            name, date, language, code = paste.get(alias)
+            name, date, expire, language, code = paste.get(alias)
         except KeyError:
             raise web.HTTPError(404)
 
@@ -76,9 +76,28 @@ class Paste(web.page.PageHandler):
         except KeyError:
             language_txt = 'Text'
 
-        return page.format(pygments=pygments.formatters.HtmlFormatter().get_style_defs('.highlight'), name=name, date=date, language=language_txt, code=highlighted)
+        return page.format(pygments=pygments.formatters.HtmlFormatter().get_style_defs('.highlight'), name=name, date=date, expire=expire, language=language_txt, code=highlighted)
 
-routes.update({'/': Interface, '/' + alias: Paste})
+
+class Raw(web.HTTPHandler):
+    def do_get(self):
+        alias = self.groups[0]
+
+        try:
+            name, date, expire, language, code = paste.get(alias)
+        except KeyError:
+            raise web.HTTPError(404)
+
+        # set headers
+        self.response.headers['Content-Type'] = language
+        self.response.headers['Content-Disposition'] = 'attachment; filename="' + name + '"'
+        self.response.headers['Last-Modified'] = date
+        self.response.headers['Expires'] = expire
+
+        # return data
+        return 200, code
+
+routes.update({'/': Interface, '/' + alias: Paste, '/raw/' + alias: Raw})
 error_routes.update(web.page.new_error(handler=ErrorInterface))
 
 

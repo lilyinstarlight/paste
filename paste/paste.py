@@ -25,12 +25,13 @@ def get(alias):
     # get metadata
     name = response.getheader('Content-Filename')
     date = response.getheader('Last-Modified')
+    expire = response.getheader('Expires')
     language = response.getheader('Content-Type')
 
     # store the code
     code = response.read().decode('utf-8')
 
-    return name, date, language, code
+    return name, date, expire, language, code
 
 
 def put(alias, name, language, code):
