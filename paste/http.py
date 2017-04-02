@@ -97,7 +97,7 @@ class Raw(web.HTTPHandler):
         # return data
         return 200, code
 
-routes.update({'/': Interface, '/' + alias: Paste, '/raw/' + alias: Raw})
+routes.update({'/': Interface, '/' + alias: Paste, '/' + alias + '/raw': Raw})
 error_routes.update(web.page.new_error(handler=ErrorInterface))
 
 
