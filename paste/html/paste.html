@@ -4,6 +4,26 @@
 		<title>paste - {name}</title>
 
 		<style>
+			.header {{
+				display: table;
+
+				width: 100%;
+			}}
+
+			.details {{
+				display: table-cell;
+
+				text-align: left;
+				vertical-align: top;
+			}}
+
+			.links {{
+				display: table-cell;
+
+				text-align: right;
+				vertical-align: top;
+			}}
+
 			.container {{
 				width: 100%;
 
@@ -36,9 +56,17 @@
 		<main>
 			<h3>{name}</h3>
 
-			<p>Date: {date}</p>
-			<p>Expires: {expire}</p>
-			<p>Language: {language}</p>
+			<div class="header">
+				<span class="details">
+					<p>Date: {date}</p>
+					<p>Expires: {expire}</p>
+					<p>Language: {language}</p>
+				</span>
+
+				<span class="links">
+					<p><a href="{raw}">View Raw</a></p>
+				</span>
+			</div>
 
 			<div class="container highlight">
 				{code}
