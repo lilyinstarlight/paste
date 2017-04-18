@@ -40,7 +40,7 @@ class Interface(web.page.PageHandler, web.form.FormHandler):
         try:
             alias = paste.put(alias, name, language, code)
 
-            self.message = 'Successfully created at <a href="' + config.service + '/' + urllib.parse.quote(alias) + '">' + config.service + '/' + html.ecsape(alias) + '</a>.'
+            self.message = 'Successfully created at <a href="' + config.service + '/' + urllib.parse.quote(alias) + '">' + config.service + '/' + html.escape(alias) + '</a>.'
         except KeyError:
             self.message = 'This alias already exists. Wait until it expires or choose another.'
 
