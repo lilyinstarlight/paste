@@ -1,3 +1,3 @@
-tmp
-===
-tmp is a web service for storing smaller files that only last for a short period of time.
+paste
+=====
+paste is a web service for storing code or text for a short period of time.
