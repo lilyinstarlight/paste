@@ -65,7 +65,7 @@ class Paste(web.page.PageHandler):
             raise web.HTTPError(404)
 
         try:
-            lexer = pygments.lexers.get_lexer_for_mimetype(language, stripall=True)
+            lexer = pygments.lexers.get_lexer_for_mimetype(language)
             formatter = pygments.formatters.HtmlFormatter(linenos=True)
 
             highlighted = pygments.highlight(code, lexer, formatter)
