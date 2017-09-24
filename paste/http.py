@@ -26,7 +26,7 @@ class Interface(web.page.PageHandler, web.form.FormHandler):
     message = ''
 
     def format(self, page):
-        return page.format(message=self.message)
+        return page.format(message=self.message, languages=mime.languages)
 
     def do_post(self):
         try:
@@ -65,7 +65,11 @@ class Paste(web.page.PageHandler):
             raise web.HTTPError(404)
 
         try:
-            lexer = pygments.lexers.get_lexer_for_mimetype(language)
+            if language.startswith('x-'):
+                lexer = pygments.lexers.get_lexer_by_name(language.split('/', 1)[1])
+            else:
+                lexer = pygments.lexers.get_lexer_for_mimetype(language)
+
             formatter = pygments.formatters.HtmlFormatter(linenos=True)
 
             highlighted = pygments.highlight(code, lexer, formatter)
