@@ -45,6 +45,7 @@ supported = [
     ('text/matlab', '.m', 'Matlab'),
     ('text/x-ocaml', '.ml', 'OCaml'),
     ('text/x-objective-c', '.m', 'Objective-C'),
+    ('text/x-perl', '.pl', 'Perl'),
     ('application/x-php', '.php', 'PHP'),
     ('text/x-prolog', '.ecl', 'Prolog'),
     ('text/x-python', '.py', 'Python'),
