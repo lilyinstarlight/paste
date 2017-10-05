@@ -164,4 +164,4 @@ supported = [
 types = {entry[0]: entry[2] for entry in supported if entry[0] != 'heading'}
 extensions = {entry[0]: entry[1] for entry in supported if entry[0] != 'heading'}
 
-languages = '\n'.join('<option value={}>{}</option>'.format(entry[0], entry[2]) if entry[0] != 'heading' else '<option disabled>──────────</option>\n<option disabled>{}</option>'.format(entry[1]) for entry in supported)
+languages = '\n'.join('<option value={}>{}</option>'.format(entry[0], entry[2]) if entry[0] != 'heading' else '<option disabled>──────────</option>\n<option disabled>{}</option>'.format(entry[2]) for entry in supported)
