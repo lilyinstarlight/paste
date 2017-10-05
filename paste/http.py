@@ -3,13 +3,13 @@ import mimetypes
 import time
 import urllib.parse
 
-import web, web.form, web.page
+import fooster.web, fooster.web.form, fooster.web.page
 
 import pygments
 import pygments.lexers
 import pygments.formatters
 
-from paste import config, log, mime, paste
+from paste import config, mime, paste
 
 
 alias = '([a-zA-Z0-9._-]+)'
@@ -20,7 +20,7 @@ routes = {}
 error_routes = {}
 
 
-class Interface(web.page.PageHandler, web.form.FormHandler):
+class Interface(fooster.web.page.PageHandler, fooster.web.form.FormHandler):
     directory = config.template
     page = 'index.html'
     message = ''
@@ -35,7 +35,7 @@ class Interface(web.page.PageHandler, web.form.FormHandler):
             language = self.request.body['language']
             code = self.request.body['code']
         except (KeyError, TypeError):
-            raise web.HTTPError(400)
+            raise fooster.web.HTTPError(400)
 
         try:
             alias = paste.put(alias, name, language, code)
@@ -47,12 +47,12 @@ class Interface(web.page.PageHandler, web.form.FormHandler):
         return self.do_get()
 
 
-class ErrorInterface(web.page.PageErrorHandler):
+class ErrorInterface(fooster.web.page.PageErrorHandler):
     directory = config.template
     page = 'error.html'
 
 
-class Paste(web.page.PageHandler):
+class Paste(fooster.web.page.PageHandler):
     directory = config.template
     page = 'paste.html'
 
@@ -62,7 +62,7 @@ class Paste(web.page.PageHandler):
         try:
             name, date, expire, language, code = paste.get(alias)
         except KeyError:
-            raise web.HTTPError(404)
+            raise fooster.web.HTTPError(404)
 
         try:
             if language.startswith('x-'):
@@ -86,100 +86,19 @@ class Paste(web.page.PageHandler):
         return page.format(pygments=pygments.formatters.HtmlFormatter().get_style_defs('.highlight'), name=html.escape(name), date=date, expire=expire, language=language_txt, code=highlighted, raw=urllib.parse.quote(self.request.resource) + '/raw')
 
 
-class Raw(web.HTTPHandler):
-    extensions = {
-        # plain
-        'text/plain': '.txt',
-
-        # popular languages
-        'text/x-python': '.py',
-        'application/x-ruby': '.rb',
-        'text/x-gosrc': '.go',
-        'application/javascript': '.js',
-        'text/x-java': '.java',
-        'text/x-swift': '.swift',
-        'text/x-csharp': '.cs',
-        'text/x-csrc': '.c',
-        'text/x-c++src': '.cpp',
-
-        # programming languages
-        'application/x-actionscript': '.as',
-        'application/x-actionscript3': '.as',
-        'text/x-arduino': '.ino',
-        'text/coffeescript': '.coffee',
-        'text/x-dsrc': '.d',
-        'text/x-erlang': '.erl',
-        'text/x-fortran': '.f',
-        'text/x-glslsrc': '.glsl',
-        'text/x-haskell': '.hs',
-        'text/x-julia': '.jl',
-        'text/x-common-lisp': '.lisp',
-        'text/x-lua': '.lua',
-        'text/matlab': '.m',
-        'text/x-ocaml': '.ml',
-        'text/x-objective-c': '.m',
-        'application/x-php': '.php',
-        'text/rust': '.rs',
-        'text/x-scala': '.scala',
-        'text/x-scheme': '.scm',
-        'text/x-typescript': '.ts',
-        'text/x-vala': '.vala',
-
-        # low-level languages
-        'text/x-gas': '.s',
-        'text/x-nasm': '.asm',
-        'text/x-windows-registry': '.reg',
-        'text/x-vhdl': '.vhdl',
-        'text/x-verilog': '.v',
-
-        # markup languages
-        'text/html': '.html',
-        'text/css': '.css',
-        'text/x-gnuplot': '.gpi',
-        'application/json': '.json',
-        'text/x-less-css': '.less',
-        'application/postscript': '.ps',
-        'text/x-sass': '.sass',
-        'text/x-scss': '.scss',
-        'text/x-tex': '.tex',
-        'text/xml': '.xml',
-        'text/x-yaml': '.yaml',
-
-        # shell languages
-        'application/x-fish': '.fish',
-        'text/x-powershell': '.ps1',
-        'application/x-sh': '.sh',
-
-        # configuration languages
-        'text/x-apacheconf': '.conf',
-        'text/x-dockerfile-config': '.docker',
-        'text/x-ini': '.ini',
-        'text/x-nginx-conf': '.conf',
-        'text/x-java-properties': '.properties',
-        'text/x-vim': '.vim',
-
-        # code building languages
-        'text/x-cmake': '.cmake',
-        'text/x-makefile': '.makefile',
-
-        # other languages
-        'text/x-diff': '.patch',
-        'text/x-irclog': '.irc',
-        'text/x-sql': '.sql',
-    }
-
+class Raw(fooster.web.HTTPHandler):
     def do_get(self):
         alias = self.groups[0]
 
         try:
             name, date, expire, language, code = paste.get(alias)
         except KeyError:
-            raise web.HTTPError(404)
+            raise fooster.web.HTTPError(404)
 
         # add extension if necessary
         if mimetypes.guess_type(name)[0] != language:
             try:
-                name += self.extensions[language]
+                name += mime.extensions[language]
             except KeyError:
                 pass
 
@@ -193,13 +112,13 @@ class Raw(web.HTTPHandler):
         return 200, code
 
 routes.update({'/': Interface, '/' + alias: Paste, '/' + alias + '/raw': Raw})
-error_routes.update(web.page.new_error(handler=ErrorInterface))
+error_routes.update(fooster.web.page.new_error(handler=ErrorInterface))
 
 
 def start():
     global http
 
-    http = web.HTTPServer(config.addr, routes, error_routes, log=log.httplog)
+    http = fooster.web.HTTPServer(config.addr, routes, error_routes)
     http.start()
 
 
@@ -208,3 +127,9 @@ def stop():
 
     http.stop()
     http = None
+
+
+def join():
+    global http
+
+    http.join()
