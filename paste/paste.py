@@ -56,7 +56,7 @@ def put(alias, name, language, code):
         raise KeyError()
     elif response.status == 400:
         raise NameError()
-    else:
+    elif response.status != 404:
         raise ValueError()
 
     # determine if this is a put or a post
