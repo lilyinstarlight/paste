@@ -43,6 +43,10 @@ class Interface(fooster.web.page.PageHandler, fooster.web.form.FormHandler):
             self.message = 'Successfully created at <a href="' + config.service + '/' + urllib.parse.quote(alias) + '">' + config.service + '/' + html.escape(alias) + '</a>.'
         except KeyError:
             self.message = 'This alias already exists. Wait until it expires or choose another.'
+        except NameError:
+            self.message = 'This alias is not valid. Choose one made up of alphanumeric characters only.'
+        except ValueError:
+            self.message = 'Could not upload data for some reason. Perhaps you should try again.'
 
         return self.do_get()
 
