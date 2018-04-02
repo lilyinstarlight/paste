@@ -52,8 +52,12 @@ def put(alias, name, language, code):
     response.read()
 
     # check for existing alias
-    if response.status != 404:
+    if response.status == 200:
         raise KeyError()
+    elif response.status == 400:
+        raise NameError()
+    else:
+        raise ValueError()
 
     # determine if this is a put or a post
     if alias:
@@ -72,7 +76,7 @@ def put(alias, name, language, code):
 
     # note bad requests
     if response.status != 201:
-        raise KeyError()
+        raise ValueError()
 
     # make a data request
     conn.request('PUT', config.store_endpoint + 'store/paste/' + data['alias'], body=code)
