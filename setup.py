@@ -41,5 +41,5 @@ setup(
     install_requires=['fooster-web', 'pygments'],
     packages=find_packages(),
     package_data={'': ['html/*.*', 'res/*.*']},
-    entry_points = {'console_scripts': ['paste = paste.main']},
+    entry_points = {'console_scripts': ['paste = paste.__main__:main']},
 )

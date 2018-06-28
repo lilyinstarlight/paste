@@ -12,7 +12,7 @@ import pygments.formatters
 from paste import config, mime, paste
 
 
-alias = '([a-zA-Z0-9._-]+)'
+alias = '(?<alias>[a-zA-Z0-9._-]+)'
 
 http = None
 
@@ -61,7 +61,7 @@ class Paste(fooster.web.page.PageHandler):
     page = 'paste.html'
 
     def format(self, page):
-        alias = self.groups[0]
+        alias = self.groups['alias']
 
         try:
             name, date, expire, language, code = paste.get(alias)
@@ -92,7 +92,7 @@ class Paste(fooster.web.page.PageHandler):
 
 class Raw(fooster.web.HTTPHandler):
     def do_get(self):
-        alias = self.groups[0]
+        alias = self.groups['alias']
 
         try:
             name, date, expire, language, code = paste.get(alias)
