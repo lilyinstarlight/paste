@@ -12,7 +12,7 @@ import pygments.formatters
 from paste import config, mime, paste
 
 
-alias = '(?<alias>[a-zA-Z0-9._-]+)'
+alias = '(?P<alias>[a-zA-Z0-9._-]+)'
 
 http = None
 
