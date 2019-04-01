@@ -39,6 +39,9 @@ class Interface(fooster.web.page.PageHandler, fooster.web.form.FormHandler):
         except (KeyError, TypeError):
             raise fooster.web.HTTPError(400)
 
+        if alias == '.' or alias == '..':
+            raise fooster.web.HTTPError(400)
+
         try:
             alias = paste.put(alias, name, language, code)
 
@@ -64,6 +67,9 @@ class Paste(fooster.web.page.PageHandler):
 
     def format(self, page):
         alias = self.groups['alias']
+
+        if alias == '.' or alias == '..':
+            raise fooster.web.HTTPError(400)
 
         try:
             name, date, expire, language, code = paste.get(alias)
@@ -95,6 +101,9 @@ class Paste(fooster.web.page.PageHandler):
 class Raw(fooster.web.HTTPHandler):
     def do_get(self):
         alias = self.groups['alias']
+
+        if alias == '.' or alias == '..':
+            raise fooster.web.HTTPError(400)
 
         try:
             name, date, expire, language, code = paste.get(alias)
