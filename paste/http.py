@@ -1,10 +1,12 @@
 import html
+import logging
 import mimetypes
 import re
-import time
 import urllib.parse
 
-import fooster.web, fooster.web.form, fooster.web.page
+import fooster.web
+import fooster.web.form
+import fooster.web.page
 
 import pygments
 import pygments.lexers
@@ -19,6 +21,9 @@ http = None
 
 routes = {}
 error_routes = {}
+
+
+log = logging.getLogger('paste')
 
 
 class Interface(fooster.web.page.PageHandler, fooster.web.form.FormHandler):
@@ -92,8 +97,8 @@ class Paste(fooster.web.page.PageHandler):
             formatter = pygments.formatters.HtmlFormatter(linenos=True)
 
             highlighted = pygments.highlight(code, lexer, formatter)
-        except:
-            log.pastelog.exception('Caught exception while highlighting "' + alias + '"')
+        except Exception:
+            log.exception('Caught exception while highlighting "' + alias + '"')
 
             highlighted = html.escape(code)
 
@@ -135,6 +140,7 @@ class Raw(fooster.web.HTTPHandler):
 
         # return data
         return 200, code
+
 
 routes.update({'/': Interface, '/' + alias_regex: Paste, '/' + alias_regex + '/raw': Raw})
 error_routes.update(fooster.web.page.new_error(handler=ErrorInterface))

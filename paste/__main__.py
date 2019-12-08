@@ -3,6 +3,8 @@ import logging
 import signal
 import sys
 
+import fooster.web
+
 from paste import config
 
 
@@ -39,7 +41,7 @@ def main():
         config.store = args.store
 
     if args.interval:
-        config.interval = args.interval*3600
+        config.interval = args.interval * 3600
 
     if args.service:
         config.service = args.service
