@@ -44,7 +44,7 @@ class Interface(fooster.web.page.PageHandler, fooster.web.form.FormHandler):
             raise fooster.web.HTTPError(400)
 
         try:
-            if not re.fullmatch(alias_regex, alias):
+            if alias and not re.fullmatch(alias_regex, alias):
                 raise NameError('alias ' + repr(alias) + ' invalid')
 
             alias = paste.put(alias, name, language, code)
@@ -76,6 +76,9 @@ class Paste(fooster.web.page.PageHandler):
             raise fooster.web.HTTPError(400)
 
         try:
+            if not re.fullmatch(alias_regex, alias):
+                raise KeyError(alias)
+
             name, date, expire, language, code = paste.get(alias)
         except KeyError:
             raise fooster.web.HTTPError(404)
@@ -110,6 +113,9 @@ class Raw(fooster.web.HTTPHandler):
             raise fooster.web.HTTPError(400)
 
         try:
+            if not re.fullmatch(alias_regex, alias):
+                raise KeyError(alias)
+
             name, date, expire, language, code = paste.get(alias)
         except KeyError:
             raise fooster.web.HTTPError(404)
