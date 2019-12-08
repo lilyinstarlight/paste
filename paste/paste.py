@@ -1,26 +1,29 @@
 import json
 import time
 import http.client
+import urllib.parse
 
 from paste import config
 
 
 def get(alias):
     # connect to API
-    if config.store_https:
-        conn = http.client.HTTPSConnection(config.store)
+    url = urllib.parse.urlparse(config.store)
+
+    if url.scheme == 'https':
+        conn = http.client.HTTPSConnection(url.netloc)
     else:
-        conn = http.client.HTTPConnection(config.store)
+        conn = http.client.HTTPConnection(url.netloc)
 
     # request given alias
-    conn.request('GET', config.store_endpoint + 'store/paste/' + alias)
+    conn.request('GET', url.path.rstrip('/') + '/store/paste/' + alias)
 
     # get response
     response = conn.getresponse()
 
     # check for 404
     if response.status == 404:
-        raise KeyError()
+        raise KeyError(alias)
 
     # get metadata
     name = response.getheader('Content-Filename')
@@ -39,10 +42,12 @@ def put(alias, name, language, code):
         code = code.encode('utf-8')
 
     # connect to API
-    if config.store_https:
-        conn = http.client.HTTPSConnection(config.store)
+    url = urllib.parse.urlparse(config.store)
+
+    if url.scheme == 'https':
+        conn = http.client.HTTPSConnection(url.netloc)
     else:
-        conn = http.client.HTTPConnection(config.store)
+        conn = http.client.HTTPConnection(url.netloc)
 
     # determine if this is a put or a post
     if alias:
@@ -51,7 +56,7 @@ def put(alias, name, language, code):
         method = 'POST'
 
     # make a metadata request
-    conn.request(method, config.store_endpoint + 'api/paste/' + alias, headers={'Content-Type': 'application/json'}, body=json.dumps({'filename': name, 'size': len(code), 'type': language, 'expire': time.time() + config.interval, 'locked': True}).encode('utf-8'))
+    conn.request(method, url.path.rstrip('/') + '/api/paste/' + alias, headers={'Content-Type': 'application/json'}, body=json.dumps({'filename': name, 'size': len(code), 'type': language, 'expire': time.time() + config.interval, 'locked': True}).encode('utf-8'))
 
     # get response
     response = conn.getresponse()
@@ -61,14 +66,14 @@ def put(alias, name, language, code):
 
     # note bad requests - existing alias, bad name, and unknown error
     if response.status == 403:
-        raise KeyError()
+        raise KeyError(alias)
     elif response.status == 404:
-        raise NameError()
+        raise NameError('alias ' + repr(alias) + ' invalid')
     elif response.status != 201:
-        raise ValueError()
+        raise ValueError('failed to make alias: ' + repr(alias))
 
     # make a data request
-    conn.request('PUT', config.store_endpoint + 'store/paste/' + data['alias'], body=code)
+    conn.request('PUT', url.path.rstrip('/') + '/store/paste/' + data['alias'], body=code)
 
     # get response
     response = conn.getresponse()
@@ -76,6 +81,6 @@ def put(alias, name, language, code):
 
     # note bad requests
     if response.status != 204:
-        raise KeyError()
+        raise ValueError('failed to make alias: ' + repr(alias))
 
     return data['alias']
