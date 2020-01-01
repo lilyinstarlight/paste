@@ -1,7 +1,9 @@
 import html
 import logging
 import mimetypes
+import os.path
 import re
+import string
 import urllib.parse
 
 import fooster.web
@@ -16,6 +18,8 @@ from paste import config, mime, paste
 
 
 alias_regex = '(?P<alias>[a-zA-Z0-9._-]+)'
+
+filename_safe = string.ascii_letters + string.digits + ' ()._-'
 
 http = None
 
@@ -132,9 +136,14 @@ class Raw(fooster.web.HTTPHandler):
             except KeyError:
                 pass
 
+        # make sanitized filename
+        filename = ''.join(char for char in os.path.basename(name) if char in filename_safe)
+        if filename == '.' or filename == '..':
+            filename = 'download'
+
         # set headers
         self.response.headers['Content-Type'] = language
-        self.response.headers['Content-Disposition'] = 'attachment; filename="' + name + '"'
+        self.response.headers['Content-Disposition'] = 'attachment; filename="' + filename + '"'
         self.response.headers['Last-Modified'] = date
         self.response.headers['Expires'] = expire
 
