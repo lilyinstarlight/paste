@@ -15,6 +15,7 @@ def main():
     parser.add_argument('-t', '--template', dest='template', help='template directory to use')
     parser.add_argument('-l', '--log', dest='log', help='log directory to use')
     parser.add_argument('-s', '--store', dest='store', help='uri of store backend')
+    parser.add_argument('-z', '--timezone', dest='timezone', help='timezone for displayed times')
     parser.add_argument('-i', '--interval', dest='interval', help='number of hours to keep files')
     parser.add_argument('service', nargs='?', help='uri of service')
 
@@ -39,6 +40,9 @@ def main():
 
     if args.store:
         config.store = args.store
+
+    if args.timezone:
+        config.timezone = args.timezone
 
     if args.interval:
         config.interval = args.interval * 3600
