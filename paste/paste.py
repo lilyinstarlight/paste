@@ -70,7 +70,7 @@ def put(alias, name, language, code):
     elif response.status == 404:
         raise NameError('alias ' + repr(alias) + ' invalid')
     elif response.status != 201:
-        raise ValueError('failed to make alias: ' + repr(alias))
+        raise RuntimeError('failed to make alias: ' + repr(alias))
 
     # make a data request
     conn.request('PUT', url.path.rstrip('/') + '/store/paste/' + data['alias'], body=code)
@@ -81,6 +81,6 @@ def put(alias, name, language, code):
 
     # note bad requests
     if response.status != 204:
-        raise ValueError('failed to make alias: ' + repr(alias))
+        raise RuntimeError('failed to make alias: ' + repr(alias))
 
     return data['alias']

@@ -1,0 +1,126 @@
+#!/usr/bin/env python3
+import html.parser
+import mimetypes
+import sys
+
+import requests
+
+
+service = 'https://paste.fooster.io/'
+
+
+class AliasExistsError(Exception):
+    pass
+
+
+class FileTooLargeError(Exception):
+    pass
+
+
+class BadAliasError(Exception):
+    pass
+
+
+class UnknownError(Exception):
+    pass
+
+
+class MessageParser(html.parser.HTMLParser):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.capture = 0
+        self.message = None
+        self.href = None
+
+    def handle_starttag(self, tag, attrs):
+        if self.capture:
+            self.capture += 1
+
+            if not self.href:
+                for attr in attrs:
+                    key, val = attr
+                    if key.lower() == 'href':
+                        self.href = val
+        else:
+            for attr in attrs:
+                key, val = attr
+                if key.lower() == 'id' and val.lower() == 'message':
+                    self.capture = 1
+                    self.message = ''
+
+    def handle_endtag(self, tag):
+        if self.capture:
+            self.capture -= 1
+
+    def handle_data(self, data):
+        if self.capture:
+            self.message += data
+
+
+def upload(stream, alias=None, name=None, language=None):
+    parser = MessageParser()
+
+    if name is None:
+        if stream is not sys.stdin:
+            name = stream.name
+        else:
+            name = 'Unnamed'
+
+    if language is None:
+        mime = mimetypes.guess_type(payload['filename'])[0]
+        if mime:
+            language = mime
+        else:
+            language = 'text/plain'
+
+    resp = requests.post(service, files={
+        'name': (None, name),
+        'language': (None, language),
+        'code': (None, stream.read()),
+        'alias': (None, alias if alias is not None else ''),
+    })
+
+    if resp.status_code == 413:
+        raise FileTooLargeError()
+
+    parser.feed(resp.text)
+
+    if 'alias already exists' in parser.message.lower():
+        raise AliasExistsError()
+    if 'alias is not valid' in parser.message.lower():
+        raise BadAliasError()
+    if 'upload is too large' in parser.message.lower():
+        raise FileTooLargeError()
+    if 'success' not in parser.message.lower():
+        raise UnknownError()
+
+    return parser.href
+
+
+if __name__ == '__main__':
+    import sys
+
+    from argparse import ArgumentParser, FileType
+
+    parser = ArgumentParser(description='upload pastes to the pastebin service at {}'.format(service))
+    parser.add_argument('-a', '--alias', dest='alias', help='alias to upload paste under (random if omitted)')
+    parser.add_argument('-n', '--name', dest='name', help='name of paste (guessed if omitted)')
+    parser.add_argument('-l', '--language', dest='language', help='language of paste (guessed if omitted)')
+    parser.add_argument('file', nargs='?', default=sys.stdin.buffer, type=FileType('rb'), help='file to upload (reads from stdin if omitted)')
+
+    args = parser.parse_args()
+
+    try:
+        print('created at ' + upload(args.file, args.alias, args.name, args.language))
+    except AliasExistsError:
+        print('fpaste: error: alias already exists', file=sys.stderr)
+        sys.exit(3)
+    except FileTooLargeError:
+        print('fpaste: error: input file is too large', file=sys.stderr)
+        sys.exit(4)
+    except BadAliasError:
+        print('fpaste: error: alias is invalid', file=sys.stderr)
+        sys.exit(5)
+    except UnknownError:
+        print('fpaste: error: an unknown error occured', file=sys.stderr)
+        sys.exit(1)
