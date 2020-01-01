@@ -139,7 +139,7 @@ class Raw(fooster.web.HTTPHandler):
         # make sanitized filename
         filename = ''.join(char for char in os.path.basename(name) if char in filename_safe)
         if filename == '.' or filename == '..':
-            filename = 'download'
+            filename = 'download.txt'
 
         # set headers
         self.response.headers['Content-Type'] = language
