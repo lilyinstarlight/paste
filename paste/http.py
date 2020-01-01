@@ -26,7 +26,7 @@ error_routes = {}
 log = logging.getLogger('paste')
 
 
-class Interface(fooster.web.page.PageHandler, fooster.web.form.FormHandler):
+class Interface(fooster.web.form.FormMixIn, fooster.web.page.PageHandler):
     nonatomic = True
 
     directory = config.template
