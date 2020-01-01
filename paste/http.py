@@ -111,7 +111,7 @@ class Paste(fooster.web.page.PageHandler):
         except KeyError:
             language_txt = 'Text'
 
-        return page.format(pygments=pygments.formatters.HtmlFormatter().get_style_defs('.highlight'), name=html.escape(name), date=date, expire=expire, language=language_txt, code=highlighted, raw=urllib.parse.quote(self.request.resource) + '/raw')
+        return page.format(pygments=pygments.formatters.HtmlFormatter().get_style_defs('.highlight'), name=html.escape(name), date=date.strftime(config.datetime_format), expire=expire.strftime(config.datetime_format), language=language_txt, code=highlighted, raw=urllib.parse.quote(self.request.resource) + '/raw')
 
 
 class Raw(fooster.web.HTTPHandler):

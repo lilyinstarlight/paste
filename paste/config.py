@@ -15,5 +15,11 @@ service = 'https://paste.fooster.io/'
 # where store is located
 store = 'https://store.fooster.io/'
 
+# datetime timezone
+timezone = 'UTC'
+
 # interval for storing pastes
 interval = 604800  # 1 week
+
+# datetime format
+datetime_format = '%Y-%m-%d %H:%M %Z'

@@ -38,7 +38,7 @@ setup(
     license='MIT',
     author='Foster McLane',
     author_email='fkmclane@gmail.com',
-    install_requires=['fooster-web', 'pygments'],
+    install_requires=['fooster-web', 'python-dateutil', 'pygments'],
     packages=find_packages(),
     package_data={'': ['html/*.*', 'res/*.*']},
     entry_points={'console_scripts': ['paste = paste.__main__:main']},
