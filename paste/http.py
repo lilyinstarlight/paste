@@ -6,6 +6,8 @@ import re
 import string
 import urllib.parse
 
+import dateutil.tz
+
 import fooster.web
 import fooster.web.form
 import fooster.web.page
@@ -91,6 +93,9 @@ class Paste(fooster.web.page.PageHandler):
             name, date, expire, language, code = paste.get(alias)
         except KeyError:
             raise fooster.web.HTTPError(404)
+
+        date = datetime.datetime.strptime(date, '%a, %d %b %Y %H:%M:%S %Z').replace(tzinfo=datetime.timezone.utc).astimezone(dateutil.tz.gettz(config.timezone))
+        expire = datetime.datetime.strptime(expire, '%a, %d %b %Y %H:%M:%S %Z').replace(tzinfo=datetime.timezone.utc).astimezone(dateutil.tz.gettz(config.timezone))
 
         try:
             if language.startswith('x-'):

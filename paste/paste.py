@@ -3,8 +3,6 @@ import time
 import http.client
 import urllib.parse
 
-import dateutil.tz
-
 from paste import config
 
 
@@ -29,8 +27,8 @@ def get(alias):
 
     # get metadata
     name = response.getheader('Content-Filename')
-    date = datetime.datetime.strptime(response.getheader('Last-Modified'), '%a, %d %b %Y %H:%M:%S %Z').replace(tzinfo=datetime.timezone.utc).astimezone(dateutil.tz.gettz(config.timezone))
-    expire = datetime.datetime.strptime(response.getheader('Expires'), '%a, %d %b %Y %H:%M:%S %Z').replace(tzinfo=datetime.timezone.utc).astimezone(dateutil.tz.gettz(config.timezone))
+    date = response.getheader('Last-Modified')
+    expire = response.getheader('Expires')
     language = response.getheader('Content-Type')
 
     # store the code
