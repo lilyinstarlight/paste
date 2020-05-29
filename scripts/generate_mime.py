@@ -193,7 +193,6 @@ supported = [
     ('x-pygments/zeek', '.zeek', 'Zeek'),
     ('text/x-cuda', '.cu', 'CUDA'),
     ('text/x-diff', '.diff', 'Diff'),
-    ('text/x-irclog', '.txt', 'IRC Logs'),
     ('application/mathematica', '.nb', 'Mathematica'),
     ('text/x-mysql', '.sql', 'MySQL'),
     ('text/x-postgresql', '.sql', 'PostgreSQL'),
@@ -205,31 +204,37 @@ supported = [
     ('x-pygments/http', '.http', 'HTTP'),
     ('multipart/mixed', '.mime', 'MIME'),
 
+    ('heading', '', 'Logs'),
+
+    ('text/x-irclog', '.txt', 'IRC Logs'),
+    ('x-pygments/kmsg', '.kmsg', 'Kernel Log'),
+
     ('heading', '', 'Other Languages'),
 ]
 
 
 moves = {
     'Text only': 'Text',
-    'markdown': 'Markdown',
-    'VB.net': 'VB.NET',
-    'objdump-nasm': 'NASM Objdump',
-    'vhdl': 'VHDL',
-    'verilog': 'Verilog',
-    'LessCss': 'Less',
-    'markdown': 'Markdown',
-    'MoinMoin/Trac Wiki markup': 'Trac Wiki',
-    'HTML + Angular2': 'HTML+Angular2',
-    'Tcsh': 'tcsh',
     'ApacheConf': 'Apache',
+    'Debian Control file': 'Debian Control',
+    'E-mail': 'Email',
+    'HTML + Angular2': 'HTML+Angular2',
+    'IRC logs': 'IRC Logs',
+    'Kernel log': 'Kernel Log',
+    'LessCss': 'Less',
+    'MoinMoin/Trac Wiki markup': 'Trac Wiki',
     'Nginx configuration file': 'Nginx',
-    'reg': 'Windows Registry',
+    'PostgreSQL SQL dialect': 'PostgreSQL',
+    'Tcsh': 'tcsh',
+    'VB.net': 'VB.NET',
     'VimL': 'Vim',
     'autohotkey': 'AutoHotkey',
-    'Debian Control file': 'Debian Control',
-    'IRC logs': 'IRC Logs',
-    'PostgreSQL SQL dialect': 'PostgreSQL',
-    'E-mail': 'Email',
+    'markdown': 'Markdown',
+    'markdown': 'Markdown',
+    'objdump-nasm': 'NASM Objdump',
+    'reg': 'Windows Registry',
+    'verilog': 'Verilog',
+    'vhdl': 'VHDL',
 }
 
 
