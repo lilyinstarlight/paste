@@ -135,11 +135,11 @@ class Raw(fooster.web.HTTPHandler):
             raise fooster.web.HTTPError(404)
 
         # add extension if necessary
-        if language not in mime.extmap[os.path.splitext(name)[1]]:
-            try:
+        try:
+            if language not in mime.extmap[os.path.splitext(name)[1]]:
                 name += mime.extensions[language]
-            except KeyError:
-                pass
+        except KeyError:
+            pass
 
         # make sanitized filename
         filename = ''.join(char for char in os.path.basename(name) if char in filename_safe)
