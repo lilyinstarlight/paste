@@ -3,7 +3,7 @@ import html.parser
 import mimetypes
 import sys
 
-import requests
+import httpx
 
 
 service = 'https://paste.fooster.io/'
@@ -73,10 +73,10 @@ def upload(stream, alias=None, name=None, language=None):
         else:
             language = 'text/plain'
 
-    resp = requests.post(service, files={
+    resp = httpx.post(service, files={
         'name': (None, name),
         'language': (None, language),
-        'code': (None, stream.read()),
+        'code': (None, stream),
         'alias': (None, alias if alias is not None else ''),
     })
 
