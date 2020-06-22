@@ -543,4 +543,14 @@ supported = [
 types = {entry[0]: entry[2] for entry in supported if entry[0] != 'heading'}
 extensions = {entry[0]: entry[1] for entry in supported if entry[0] != 'heading'}
 
+extmap = {}
+for mime, ext in extensions.items():
+    if not ext:
+        continue
+
+    try:
+        extmap[ext].add(mime)
+    except KeyError:
+        extmap[ext] = {mime}
+
 languages = '\n'.join('<option value="{}">{}</option>'.format(entry[0], html.escape(entry[2])) if entry[0] != 'heading' else '<option disabled>──────────</option>\n<option disabled>{}</option>'.format(html.escape(entry[2])) for entry in supported)

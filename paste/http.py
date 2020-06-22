@@ -1,7 +1,6 @@
 import datetime
 import html
 import logging
-import mimetypes
 import os.path
 import re
 import string
@@ -136,7 +135,7 @@ class Raw(fooster.web.HTTPHandler):
             raise fooster.web.HTTPError(404)
 
         # add extension if necessary
-        if mimetypes.guess_type(name)[0] != language:
+        if language not in mime.extmap[os.path.splitext(name)[1]]:
             try:
                 name += mime.extensions[language]
             except KeyError:
