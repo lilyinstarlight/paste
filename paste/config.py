@@ -10,10 +10,10 @@ import os.path
 template = os.path.dirname(__file__) + '/html'
 
 # where service is located
-service = 'https://paste.fooster.io/'
+service = 'https://paste.lily.flowers'
 
 # where store is located
-store = 'https://store.fooster.io/'
+store = 'https://store.lily.flowers'
 
 # datetime timezone
 timezone = 'UTC'

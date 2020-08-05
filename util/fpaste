@@ -6,7 +6,7 @@ import sys
 import httpx
 
 
-service = 'https://paste.fooster.io/'
+service = 'https://paste.lily.flowers/'
 
 
 class AliasExistsError(Exception):
