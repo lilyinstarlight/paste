@@ -248,6 +248,7 @@ def check(list, idx, val):
 
 last = None
 
+
 def print_warning(heading, message):
     global last
 
@@ -256,7 +257,7 @@ def print_warning(heading, message):
             print(file=sys.stderr)
 
         print('Warn: ' + heading, file=sys.stderr)
-        print('======' + '='*len(heading), file=sys.stderr)
+        print('======' + '=' * len(heading), file=sys.stderr)
 
         last = heading
 
