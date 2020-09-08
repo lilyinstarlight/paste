@@ -33,7 +33,7 @@ log = logging.getLogger('paste')
 
 
 class Interface(fooster.web.form.FormMixIn, fooster.web.page.PageHandler):
-    nonatomic = True
+    reader = True
 
     directory = config.template
     page = 'index.html'
@@ -58,6 +58,9 @@ class Interface(fooster.web.form.FormMixIn, fooster.web.page.PageHandler):
             if alias and not re.fullmatch(alias_regex, alias):
                 raise NameError('alias ' + repr(alias) + ' invalid')
 
+            if language not in mime.types:
+                raise ValueError('language ' + repr(language) + ' is unknown')
+
             alias = paste.put(alias, name, language, code)
 
             self.message = 'Successfully created at <a href="' + config.service.rstrip('/') + '/' + urllib.parse.quote(alias) + '">' + config.service.rstrip('/') + '/' + html.escape(alias) + '</a>.'
@@ -65,6 +68,8 @@ class Interface(fooster.web.form.FormMixIn, fooster.web.page.PageHandler):
             self.message = 'This alias already exists. Wait until it expires or choose another.'
         except NameError:
             self.message = 'This alias is not valid. Choose one made up of alphanumeric characters only.'
+        except ValueError:
+            self.message = 'This language MIME type is unknown. Use "text/plain" if the MIME type is not supported.'
         except RuntimeError:
             self.message = 'Could not create paste for some reason. Perhaps you should try again.'
 
@@ -135,9 +140,12 @@ class Raw(fooster.web.HTTPHandler):
             raise fooster.web.HTTPError(404)
 
         # add extension if necessary
-        ext = os.path.splitext(name)[1]
-        if ext not in mime.extmap or language not in mime.extmap[ext]:
-            name += mime.extensions[language]
+        try:
+            ext = os.path.splitext(name)[1]
+            if ext not in mime.extmap or language not in mime.extmap[ext]:
+                    name += mime.extensions[language]
+        except KeyError:
+            name += '.txt'
 
         # make sanitized filename
         filename = ''.join(char for char in os.path.basename(name) if char in filename_safe)

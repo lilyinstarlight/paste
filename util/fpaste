@@ -21,6 +21,10 @@ class BadAliasError(Exception):
     pass
 
 
+class UnknownLanguageError(Exception):
+    pass
+
+
 class UnknownError(Exception):
     pass
 
@@ -89,6 +93,8 @@ def upload(stream, alias=None, name=None, language=None):
         raise AliasExistsError()
     if 'alias is not valid' in parser.message.lower():
         raise BadAliasError()
+    if 'mime type is unknown' in parser.message.lower():
+        raise UnknownLanguageError()
     if 'upload is too large' in parser.message.lower():
         raise FileTooLargeError()
     if 'success' not in parser.message.lower():
@@ -105,7 +111,7 @@ if __name__ == '__main__':
     parser = ArgumentParser(description='upload pastes to the pastebin service at {}'.format(service))
     parser.add_argument('-a', '--alias', dest='alias', help='alias to upload paste under (random if omitted)')
     parser.add_argument('-n', '--name', dest='name', help='name of paste (guessed if omitted)')
-    parser.add_argument('-l', '--language', dest='language', help='language of paste (guessed if omitted)')
+    parser.add_argument('-l', '--language', dest='language', help='language of paste (mime type) (guessed if omitted)')
     parser.add_argument('file', nargs=None if sys.stdin.isatty() else '?', default=sys.stdin.buffer, type=FileType('rb'), help='file to upload (reads from stdin if omitted)')
 
     args = parser.parse_args()
@@ -121,6 +127,9 @@ if __name__ == '__main__':
     except BadAliasError:
         print('fpaste: error: alias is invalid', file=sys.stderr)
         sys.exit(5)
+    except UnknownLanguageError:
+        print('fpaste: error: language mime type is unknown', file=sys.stderr)
+        sys.exit(6)
     except UnknownError:
         print('fpaste: error: an unknown error occured', file=sys.stderr)
         sys.exit(1)
