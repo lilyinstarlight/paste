@@ -537,7 +537,6 @@ supported = [
     ('text/x-yaml+jinja', '.sls', 'YAML+Jinja'),
     ('x-pygments/zephir', '.zep', 'Zephir'),
     ('text/zig', '.zig', 'Zig'),
-    ('text/x-ipython-console', '', 'IPython console session'),
 ]
 
 types = {entry[0]: entry[2] for entry in supported if entry[0] != 'heading'}
