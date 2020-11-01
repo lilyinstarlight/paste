@@ -5,7 +5,6 @@ import re
 from setuptools import setup, find_packages
 
 
-name = None
 version = None
 
 
@@ -24,15 +23,18 @@ def find(haystack, *needles):
                 del regexes[rindex]
                 break
 
-    return values
+    if len(needles) == 1:
+        return values[0]
+    else:
+        return values
 
 
 with open(os.path.join(os.path.dirname(__file__), 'paste', '__init__.py'), 'r') as paste:
-    name, version = find(paste, 'name', 'version')
+    version = find(paste, '__version__')
 
 
 setup(
-    name=name,
+    name='paste',
     version=version,
     description='a web service for storing pastes that only last for a short period of time',
     license='MIT',

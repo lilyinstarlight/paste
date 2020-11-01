@@ -1,2 +1,3 @@
-name = 'paste'
-version = '0.1b7'
+__version__ = '0.2.0'
+
+__all__ = []
