@@ -114,7 +114,7 @@ class Paste(fooster.web.page.PageHandler):
         except Exception:
             log.exception('Caught exception while highlighting "' + alias + '"')
 
-            highlighted = html.escape(code)
+            highlighted = '<pre>' + html.escape(code) + '</pre>'
 
         try:
             language_txt = mime.types[language]
