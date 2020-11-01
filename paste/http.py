@@ -143,7 +143,7 @@ class Raw(fooster.web.HTTPHandler):
         try:
             ext = os.path.splitext(name)[1]
             if ext not in mime.extmap or language not in mime.extmap[ext]:
-                    name += mime.extensions[language]
+                name += mime.extensions[language]
         except KeyError:
             name += '.txt'
 
