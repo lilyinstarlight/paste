@@ -190,13 +190,13 @@ supported = [
 
     ('heading', '', 'Domain-Specific Languages'),
 
-    ('x-pygments/zeek', '.zeek', 'Zeek'),
     ('text/x-cuda', '.cu', 'CUDA'),
     ('text/x-diff', '.diff', 'Diff'),
     ('application/mathematica', '.nb', 'Mathematica'),
     ('text/x-mysql', '.sql', 'MySQL'),
     ('text/x-postgresql', '.sql', 'PostgreSQL'),
     ('text/swig', '.swig', 'SWIG'),
+    ('x-pygments/zeek', '.zeek', 'Zeek'),
 
     ('heading', '', 'Protocol Languages'),
 
