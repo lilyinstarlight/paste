@@ -58,6 +58,8 @@ def _apply():
     else:
         _logging.getLogger('paste').addHandler(_logging.StreamHandler(_sys.stdout))
 
+    _logging.getLogger('paste').setLevel(_logging.INFO)
+
     if http_log:
         http_log_handler = _logging.FileHandler(http_log)
         http_log_handler.setFormatter(_web.HTTPLogFormatter())
