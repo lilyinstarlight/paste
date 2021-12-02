@@ -65,7 +65,7 @@ def upload(stream, alias=None, name=None, language=None):
     parser = MessageParser()
 
     if name is None:
-        if stream is not sys.stdin:
+        if stream is not sys.stdin.buffer:
             name = stream.name
         else:
             name = 'Unnamed'
@@ -78,10 +78,10 @@ def upload(stream, alias=None, name=None, language=None):
             language = 'text/plain'
 
     resp = httpx.post(service, files={
-        'name': (None, name),
-        'language': (None, language),
+        'name': (None, name.encode('utf-8')),
+        'language': (None, language.encode('utf-8')),
         'code': (None, stream),
-        'alias': (None, alias if alias is not None else ''),
+        'alias': (None, alias.encode('utf-8') if alias is not None else b''),
     })
 
     if resp.status_code == 413:
@@ -104,8 +104,6 @@ def upload(stream, alias=None, name=None, language=None):
 
 
 if __name__ == '__main__':
-    import sys
-
     from argparse import ArgumentParser, FileType
 
     parser = ArgumentParser(description='upload pastes to the pastebin service at {}'.format(service))
