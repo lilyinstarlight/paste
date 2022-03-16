@@ -114,6 +114,7 @@ supported = [
     ('text/html', '.html', 'HTML'),
     ('application/json', '.json', 'JSON'),
     ('text/x-less-css', '.less', 'Less'),
+    ('x-pygments/lilypond', '.ly', 'LilyPond'),
     ('text/x-markdown', '.md', 'Markdown'),
     ('application/postscript', '.ps', 'PostScript'),
     ('application/x-qml', '.qml', 'QML'),
