@@ -40,6 +40,7 @@ supported = [
     ('heading', '', 'Popular Languages'),
 
     ('text/x-python', '.py', 'Python'),
+    ('text/rust', '.rs', 'Rust'),
     ('application/x-ruby', '.rb', 'Ruby'),
     ('text/x-gosrc', '.go', 'Go'),
     ('text/x-swift', '.swift', 'Swift'),
