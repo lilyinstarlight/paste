@@ -39,8 +39,9 @@ supported = [
 
     ('heading', '', 'Popular Languages'),
 
-    ('text/x-python', '.py', 'Python'),
     ('text/rust', '.rs', 'Rust'),
+    ('text/x-nix', '.nix', 'Nix'),
+    ('text/x-python', '.py', 'Python'),
     ('application/x-ruby', '.rb', 'Ruby'),
     ('text/x-gosrc', '.go', 'Go'),
     ('text/x-swift', '.swift', 'Swift'),
@@ -124,7 +125,7 @@ supported = [
     ('text/x-scss', '.scss', 'SCSS'),
     ('x-pygments/scdoc', '.scd', 'scdoc'),
     ('text/x-tex', '.tex', 'TeX'),
-    ('x-pygments/toml', '.toml', 'TOML'),
+    ('application/toml', '.toml', 'TOML'),
     ('text/x-trac-wiki', '.wiki', 'Trac Wiki'),
     ('text/xml', '.xml', 'XML'),
     ('text/x-yaml', '.yaml', 'YAML'),
