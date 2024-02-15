@@ -47,7 +47,7 @@ class Interface(fooster.web.form.FormMixIn, fooster.web.page.PageHandler):
             alias = self.request.body['alias']
             name = self.request.body['name']
             language = self.request.body['language']
-            code = self.request.body['code']
+            code = self.request.body['code'].replace('\r\n', '\n')
         except (KeyError, TypeError):
             raise fooster.web.HTTPError(400)
 
